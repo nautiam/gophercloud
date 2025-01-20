@@ -419,7 +419,9 @@ type ReplicateOpts struct {
 	// Specifies how the database service is exposed
 	Access *AccessOpts `json:"access,omitempty"`
 	// Specifies the availability zone of the instance. Optional
-	AvailabilityZone string `json:"AvailabilityZone,omitempty"`
+	AvailabilityZone string `json:"availability_zone,omitempty"`
+	// The scheduler hint when creating underlying Nova instances
+	Locality string `json:"locality,omitempty"`
 }
 
 // ToMap converts a ReplicateOpts to a map[string]string (for a request body)
@@ -473,6 +475,10 @@ func (opts ReplicateOpts) ToMap() (map[string]interface{}, error) {
 		instance["access"] = access
 	}
 
+	if opts.Locality != "" {
+		instance["locality"] = opts.Locality
+	}
+
 	return map[string]interface{}{"instance": instance}, nil
 }
 
@@ -518,7 +524,9 @@ type RestoreOpts struct {
 	// Specifies how the database service is exposed
 	Access *AccessOpts `json:"access,omitempty"`
 	// Specifies the availability zone of the instance. Optional
-	AvailabilityZone string `json:"AvailabilityZone,omitempty"`
+	AvailabilityZone string `json:"availability_zone,omitempty"`
+	// The scheduler hint when creating underlying Nova instances
+	Locality string `json:"locality,omitempty"`
 }
 
 // ToMap converts a RestoreOpts to a map[string]string (for a request body)
@@ -600,6 +608,10 @@ func (opts RestoreOpts) ToMap() (map[string]interface{}, error) {
 			return nil, err
 		}
 		instance["access"] = access
+	}
+
+	if opts.Locality != "" {
+		instance["locality"] = opts.Locality
 	}
 
 	return map[string]interface{}{"instance": instance}, nil
